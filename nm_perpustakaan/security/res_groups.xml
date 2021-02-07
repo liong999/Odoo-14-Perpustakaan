@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="nm_perpustakaan" model="ir.module.category">
+            <field name="name">Role Perpustakaan</field>
+        </record>  
+        
+        <!-- Admin -->
+        <record id="group_nm_perpustakaan_admin" model="res.groups">
+            <field name="category_id" ref="nm_perpustakaan"/>
+            <field name="name">Admin Perpustakaan</field>
+        </record>
+
+        <record id="group_nm_perpustakaan_member" model="res.groups">
+            <field name="category_id" ref="nm_perpustakaan"/>
+            <field name="name">Member Perpustakaan</field>
+        </record>
+
+        <record id="group_nm_perpustakaan_non_member" model="res.groups">
+            <field name="category_id" ref="nm_perpustakaan"/>
+            <field name="name">Non-member Perpustakaan</field>
+        </record>
+    </data>
+</odoo>

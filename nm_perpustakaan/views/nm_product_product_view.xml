@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <record id="nm_product_view_tree" model="ir.ui.view">
+            <field name="name">product.product.perpustakaan.tree</field>
+            <field name="model">product.product</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Buku">
+                    <field name="name" />
+                    <field name="default_code" />
+                    <field name="description" />
+                </tree>
+            </field>
+        </record>
+        <!-- form view -->
+        <record id="nm_product_view_form" model="ir.ui.view">
+            <field name="name">product.product.perpustakaan.form</field>
+            <field name="model">product.product</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Buku">
+                    <header>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <!--button type="object" name="action_view_detail" class="oe_stat_button" icon="fa-pencil-square-o"-->
+                                <!--field name="detail_count" widget="statinfo" string="Detail(s)"/-->
+                                <!--field name="detail_ids" invisible="1"/-->
+                            <!--/button-->
+                        </div>
+                        <field name="id" invisible="True"/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Nama buku"/>
+                            <h1><field name="name" required="1"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="penulis" required="1"/>
+                                <field name="penerbit" required="1"/>
+                                <field name="image_1920" widget="image" options="{'preview_image': 'image_128'}"/>    
+                            </group>
+                            <group>
+                                <field name="qty" required="1"/>
+                                <field name="qty_avail" string="Qty Tersedia" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- search -->
+        <record id="nm_product_view_search" model="ir.ui.view">
+            <field name="name">product.product.perpustakaan.search</field>
+            <field name="model">product.product</field>
+            <field name="arch" type="xml">
+                <search string="Buku">
+
+                    <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
+                    <filter string="default_code" name="filter_by_default_code" domain="[('default_code','=','')]" />
+                    <filter string="Description" name="filter_by_description" domain="[('description','=','')]" />
+                    <field name="name" select="True"/>
+                    <field name="default_code" select="True"/>
+                    <field name="description" select="True"/>
+                    <group string="Group By..">
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="action_pinjam_buku" model="ir.actions.act_window">
+            <field name="name">Pinjam Buku</field>
+            <field name="res_model">nm.peminjaman</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_konfirmasi_peminjaman_wizard"/>
+            <field name="target">new</field>
+            <field name="context">{
+                "default_product_id": active_id
+                }
+            </field>
+        </record>
+
+        <!-- Kanban View -->
+        <record id="nm_product_view_kanban" model="ir.ui.view">
+            <field name="name">product.product.perpustakaan.kanban</field>
+            <field name="model">product.product</field>
+            <field name="arch" type="xml">
+                <kanban sample="1">
+                    <field name="id"/>
+                    <field name="product_variant_count"/>
+                    <field name="currency_id"/>
+                    <field name="activity_state"/>
+                    <field name="qty_avail"/>
+                    <field name="image_128"/>
+                    <progressbar field="activity_state" colors="{&quot;planned&quot;: &quot;success&quot;, &quot;today&quot;: &quot;warning&quot;, &quot;overdue&quot;: &quot;danger&quot;}"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                    <img t-att-src="kanban_image('product.product', 'image_128', record.id.raw_value)" alt="Product" class="o_image_64_contain" attrs="{'invisible':[('image_128','=',False)]}"/>
+                                    <img src="/nm_perpustakaan/static/src/img/book.png" alt="Product" class="o_image_64_contain" attrs="{'invisible':[('image_128','!=',False)]}"/>
+                                    <!-- <t t-if="image_variant_1920"> <img t-att-src="kanban_image('product.product', 'image_128', record.id.raw_value)" alt="Product" class="o_image_64_contain"/></t>
+                                    <t t-else=""><img src="/nm_perpustakaan/static/src/img/book.png" alt="Product" class="o_image_64_contain"/></t> -->
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        <strong><field name="name"/></strong>
+                                    </strong>
+                                        <pre><small>By <field name="penulis"/></small></pre>
+                                        <!-- <pre><small>Diterbitkan Oleh : <field name="penerbit"/></small></pre> -->
+                                    <ul>
+                                        <li><strong>Availability : <field name="qty_avail"/>/<field name="qty"/></strong></li>
+                                    </ul>
+                                </div>
+                                <div class="o_kanban_record_bottom" attrs="{'invisible':[('qty_avail','=',0)]}">
+                                    <div class="oe_kanban_bottom_left"/>
+                                    <div class="oe_kanban_bottom_right">
+                                        <button class="btn btn-primary" name="%(action_pinjam_buku)d" context="{'default_product_id': 'id', 'active_test': False}" type="action">Pinjam</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- action window -->
+        <record id="nm_product_action" model="ir.actions.act_window">
+            <field name="name">Buku</field>
+            <field name="res_model">product.product</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"search_default_fieldname":1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Klik tombol create untuk menambah buku Buku
+                </p><p>
+                Anda blm memiliki buku
+                </p>
+            </field>
+            <field name="view_ids" 
+                eval="[(5, 0, 0), 
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('nm_product_view_kanban')}), 
+                (0, 0, {'view_mode': 'form', 'view_id': ref('nm_product_view_form')})]"/>
+        </record>
+
+        <menuitem id='nm_perpustakaan_top_menu' name='Perpustakaan' sequence="00" web_icon="nm_perpustakaan,static/src/img/Asset 1.png"/>
+        <menuitem id="nm_product_menu" name="Buku" parent="nm_perpustakaan_top_menu" action="nm_product_action" sequence="00" groups="nm_perpustakaan.group_nm_perpustakaan_member,nm_perpustakaan.group_nm_perpustakaan_admin"/>
+    </data>
+</odoo>
