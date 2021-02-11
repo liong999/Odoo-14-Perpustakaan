@@ -27,8 +27,9 @@
         'security/ir.model.access.csv',
         'security/res_groups.xml',
         'views/nm_peminjaman_view.xml',
-        'views/nm_product_product_view.xml',
-        'views/templates.xml',
+        'views/nm_product_view.xml',
+        'views/nm_pendaftaran.xml',
+        'views/nm_users_view.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

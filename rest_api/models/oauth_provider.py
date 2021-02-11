@@ -106,9 +106,3 @@ class OauthAccessToken(models.Model):
         resource_scopes = set(scopes)
 
         return resource_scopes.issubset(provided_scopes)
-
-
-class OatuhUsers(models.Model):
-    _inherit = "res.users"
-
-    token_ids = fields.One2many('oauth.access_token', 'user_id', string="Access Tokens")

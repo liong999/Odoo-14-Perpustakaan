@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from datetime import timedelta, datetime, date
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import Warning
@@ -6,6 +6,7 @@ from odoo.exceptions import Warning
 class NmPeminjaman(models.Model):
     _name = 'nm.peminjaman'
     _description = 'nm.peminjaman'
+    _order = 'id desc'
 
     # 7: defaults methods
     def _get_default_user(self):
@@ -23,9 +24,16 @@ class NmPeminjaman(models.Model):
     end_date = fields.Date(string='Tgl Pengembalian',default=_get_default_end_date)
     actual_end_date = fields.Date(string='Tgl Pengembalian Aktual')
     keterlambatan = fields.Integer(string='Keterlambatan',compute='_compute_keterlambatan')
+    no_hp = fields.Char(string='No HP',compute='_compute_no_hp')
+    
     
     user_id = fields.Many2one(comodel_name='res.users', string='Peminjam',default=_get_default_user)
     product_id = fields.Many2one(comodel_name='product.product', string='Buku')
+
+    def _compute_no_hp(self):
+        for record in self:
+            if record.user_id:
+                record.no_hp = record.user_id.partner_id.mobile
 
     def _compute_keterlambatan(self):
         pass
@@ -38,12 +46,16 @@ class NmPeminjaman(models.Model):
     
     @api.model_create_multi
     def create(self, vals_list):
+        self._check_workday()
         for vals in vals_list:
             vals['name'] = self.env['ir.sequence'].sudo().get_sequence('PERPUS','PJM')
         sp = super(NmPeminjaman, self).create(vals_list)
         return sp
 
-
+    def write(self, vals):
+        self._check_workday()
+        return super(NmPeminjaman, self).write(vals)
+        
     def action_request(self):
         self.write({
             'state':'Request Peminjaman',
@@ -85,3 +97,7 @@ class NmPeminjaman(models.Model):
             'actual_end_date':self._get_default_date()           
         })
         self.product_id.qty_unavail = qty_unavail
+
+    def _check_workday(self):
+        if date.today().weekday() in (5,6):
+            raise Warning("Gagal ! Hanya bisa dilakukan pada hari Senin - Jumat.")

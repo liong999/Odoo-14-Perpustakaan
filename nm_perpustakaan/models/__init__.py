@@ -5,3 +5,4 @@ from . import nm_peminjaman
 from . import nm_product_product
 from . import nm_sequence
 from . import nm_api
+from . import nm_users

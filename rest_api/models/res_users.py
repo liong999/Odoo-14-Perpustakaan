@@ -12,6 +12,7 @@ class Users(models.Model):
     _inherit = "res.users"
     
     is_member = fields.Boolean(string='Member?')
+    token_ids = fields.One2many('oauth.access_token', 'user_id', string="Access Tokens")
 
     @api.model
     def _auth_oauth_signin(self, provider, validation, params):
