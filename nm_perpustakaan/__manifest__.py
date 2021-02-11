@@ -28,6 +28,7 @@
         'security/res_groups.xml',
         'views/nm_peminjaman_view.xml',
         'views/nm_product_view.xml',
+        'views/nm_product_admin_view.xml',
         'views/nm_pendaftaran.xml',
         'views/nm_users_view.xml',
     ],

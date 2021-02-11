@@ -13,18 +13,4 @@
             </xpath>
         </field>
     </record>
-
-    <record id="nm_member_view_tree" model="ir.ui.view">
-        <field name="name">user.member.tree</field>
-        <field name="model">res.users</field>
-        <field name="type">tree</field>
-        <field name="priority" eval="8"/>
-        <field name="arch" type="xml">
-            <tree string="Buku">
-                <field name="name" />
-                <field name="default_code" />
-                <field name="description" />
-            </tree>
-        </field>
-    </record>
 </odoo>

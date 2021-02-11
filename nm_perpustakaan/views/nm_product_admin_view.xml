@@ -2,13 +2,13 @@
 <odoo>
     <data>
         <!-- tree view -->
-        <record id="nm_product_view_tree" model="ir.ui.view">
+        <record id="nm_product_admin_view_tree" model="ir.ui.view">
             <field name="name">product.product.perpustakaan.tree</field>
             <field name="model">product.product</field>
             <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <tree string="Buku" create="0" edit="0" delete="0">
+                <tree string="Buku">
                     <field name="name" />
                     <field name="default_code" />
                     <field name="description" />
@@ -16,13 +16,13 @@
             </field>
         </record>
         <!-- form view -->
-        <record id="nm_product_view_form" model="ir.ui.view">
+        <record id="nm_product_admin_view_form" model="ir.ui.view">
             <field name="name">product.product.perpustakaan.form</field>
             <field name="model">product.product</field>
             <field name="type">form</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <form string="Buku" create="0" edit="0" delete="0">
+                <form string="Buku">
                     <header>
                     </header>
                     <sheet>
@@ -55,7 +55,7 @@
             </field>
         </record>
         <!-- search -->
-        <record id="nm_product_view_search" model="ir.ui.view">
+        <record id="nm_product_admin_view_search" model="ir.ui.view">
             <field name="name">product.product.perpustakaan.search</field>
             <field name="model">product.product</field>
             <field name="arch" type="xml">
@@ -86,11 +86,11 @@
         </record>
 
         <!-- Kanban View -->
-        <record id="nm_product_view_kanban" model="ir.ui.view">
+        <record id="nm_product_admin_view_kanban" model="ir.ui.view">
             <field name="name">product.product.perpustakaan.kanban</field>
             <field name="model">product.product</field>
             <field name="arch" type="xml">
-                <kanban sample="1" create="0" edit="0" delete="0">
+                <kanban sample="1">
                     <field name="id"/>
                     <field name="product_variant_count"/>
                     <field name="currency_id"/>
@@ -131,8 +131,8 @@
         </record>
 
         <!-- action window -->
-        <record id="nm_product_action" model="ir.actions.act_window">
-            <field name="name">Daftar Buku</field>
+        <record id="nm_product_admin_action" model="ir.actions.act_window">
+            <field name="name">Kelola Buku</field>
             <field name="res_model">product.product</field>
             <field name="type">ir.actions.act_window</field>
             <field name="view_mode">tree,form</field>
@@ -146,11 +146,10 @@
             </field>
             <field name="view_ids" 
                 eval="[(5, 0, 0), 
-                (0, 0, {'view_mode': 'kanban', 'view_id': ref('nm_product_view_kanban')}), 
-                (0, 0, {'view_mode': 'form', 'view_id': ref('nm_product_view_form')})]"/>
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('nm_product_admin_view_kanban')}), 
+                (0, 0, {'view_mode': 'form', 'view_id': ref('nm_product_admin_view_form')})]"/>
         </record>
 
-        <menuitem id='nm_perpustakaan_top_menu' name='Perpustakaan' sequence="00" web_icon="nm_perpustakaan,static/src/img/Asset 1.png"/>
-        <menuitem id="nm_product_menu" name="Daftar Buku" parent="nm_perpustakaan_top_menu" action="nm_product_action" sequence="00" groups="nm_perpustakaan.group_nm_perpustakaan_member"/>
+        <menuitem id="nm_product_admin_menu" name="kelola Buku" parent="nm_perpustakaan_top_menu" action="nm_product_admin_action" sequence="00" groups="nm_perpustakaan.group_nm_perpustakaan_admin"/>
     </data>
 </odoo>

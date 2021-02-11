@@ -5,7 +5,7 @@ class NmUsers(models.Model):
     _inherit = 'res.users'
     _description = 'User'
 
-    mobile = fields.Char(string='Mobile',related='partner_id.mobile')
+    mobile = fields.Char(string='Mobile')
     nik = fields.Char(string='NIK')
     
     
@@ -23,4 +23,18 @@ class NmUsers(models.Model):
         }
     
     def action_register_member(self):
-        pass
+        # Add to member
+        group_member_id = self.env.ref('nm_perpustakaan.group_nm_perpustakaan_member')
+        group_member_id.sudo().write({
+            'users' : [(4, self.env.user.id)]
+        })
+        # Unlink non-member
+        group_non_member_id = self.env.ref('nm_perpustakaan.group_nm_perpustakaan_non_member')
+        group_non_member_id.sudo().write({
+            'users' : [(3, self.env.user.id)]
+        })
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload',
+        }
+        # import ipdb;ipdb.set_trace()

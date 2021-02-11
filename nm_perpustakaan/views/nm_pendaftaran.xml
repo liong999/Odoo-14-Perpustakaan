@@ -19,7 +19,7 @@
                             <group>
                                 <group string=" ">
                                   <field name="nik" required="1"/>
-                                  <field name="mobile" required="1" readonly="0"/>
+                                  <field name="mobile" required="1"/>
                                 </group>
                                 <group>
                                 </group>
@@ -36,7 +36,7 @@
         </record>
 
         <record id="nm_pendaftaran_member_action" model="ir.actions.server">
-            <field name="name">Daftar Member</field>
+            <field name="name">Pendaftaran Member</field>
             <field name="type">ir.actions.server</field>
             <field name="model_id" ref="base.model_res_users"/>
             <field name="state">code</field>
@@ -45,6 +45,6 @@
             </field>
         </record>
 
-        <menuitem id="nm_pendaftaran_member_menu" name="Daftar Member" parent="nm_perpustakaan_top_menu" action="nm_pendaftaran_member_action" sequence="20" groups="nm_perpustakaan.group_nm_perpustakaan_non_member"/>
+        <menuitem id="nm_pendaftaran_member_menu" name="Pendaftaran Member" parent="nm_perpustakaan_top_menu" action="nm_pendaftaran_member_action" sequence="20" groups="nm_perpustakaan.group_nm_perpustakaan_non_member"/>
     </data>
 </odoo>

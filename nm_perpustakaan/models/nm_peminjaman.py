@@ -33,7 +33,7 @@ class NmPeminjaman(models.Model):
     def _compute_no_hp(self):
         for record in self:
             if record.user_id:
-                record.no_hp = record.user_id.partner_id.mobile
+                record.no_hp = record.user_id.mobile
 
     def _compute_keterlambatan(self):
         pass
