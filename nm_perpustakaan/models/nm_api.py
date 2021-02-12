@@ -102,7 +102,7 @@ class ControllerREST(http.Controller):
     def get_books(self,**post):
         limit = 10
         offset = 0
-        ORDER = "ORDER BY sp.date DESC"
+        ORDER = "ORDER BY product.id DESC"
         string = False
         url = str(request.httprequest.url).split('/api/')[0]
         
@@ -113,13 +113,14 @@ class ControllerREST(http.Controller):
 
         query = """
             SELECT
-                product.name
+                tmpl.name
                 ,product.penulis
-                ,product.pengarang
+                ,product.penerbit
                 ,product.qty
                 ,product.qty - product.qty_unavail as qty_avail
                 , '%s' || '/web/content/product.product/' || product.id || '/image_128' as url_image
             FROM product_product as product
+            LEFT JOIN product_template as tmpl on tmpl.id = product.product_tmpl_id
             WHERE 1=1
             AND product.active IS TRUE
             %s
