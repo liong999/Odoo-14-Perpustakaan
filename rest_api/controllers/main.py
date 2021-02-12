@@ -248,6 +248,7 @@ class ControllerREST(http.Controller):
             try:
                 request.session.authenticate(db, username, password)
                 uid = request.session.uid
+                user = request.env['res.users'].sudo().browse(uid)
 
                 user_context = request.session.get_context()
                 company_id = request.env.user.company_id.id
