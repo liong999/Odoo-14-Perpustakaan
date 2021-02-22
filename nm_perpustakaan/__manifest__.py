@@ -31,6 +31,7 @@
         'views/nm_product_admin_view.xml',
         'views/nm_pendaftaran.xml',
         'views/nm_users_view.xml',
+        'views/nm_request_buku_view.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

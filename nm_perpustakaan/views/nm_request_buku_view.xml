@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <record id="nm_request_buku_view_tree" model="ir.ui.view">
+            <field name="name">nm.request.buku.tree</field>
+            <field name="model">nm.request.buku</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Pengajuan Buku">
+                    <!-- TODO: Turn this back on -->
+                    <!-- <tree string="Pengajuan Buku" create="0" delete="0" edit="0"> -->
+                    <field name="user_id" />
+                    <field name="no_hp" />
+                    <field name="judul" />
+                    <field name="penulis" />
+                    <field name="penerbit" />
+                    <field name="date" />
+                    <field name="state" widget="badge" decoration-danger="state in ('Di Request')" decoration-success="state in ('Selesai')"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- form view -->
+        <record id="nm_request_buku_view_form" model="ir.ui.view">
+            <field name="name">nm.request.buku.form</field>
+            <field name="model">nm.request.buku</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Pengajuan Buku">
+                    <!-- <form string="Pengajuan Buku" create="0" delete="0" edit="0"> -->
+                    <header>
+                        <button name="action_done" string="Selesai" states="Di Request" class="oe_highlight" type="object" groups="nm_perpustakaan.group_nm_perpustakaan_admin,nm_perpustakaan.group_nm_perpustakaan_member"/>
+                        <field name="state" widget="statusbar" statusbar_visible="Di Request,Selesai"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <field name="create_date" invisible="1"/>
+                            <h1>
+                                <field name="name" readonly="1" attrs="{'invisible':[('create_date','=',False)]}"/>
+                            </h1>
+
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date" readonly="1" force_save="1"/>
+                                <field name="user_id" readonly="1" force_save="1"/>
+                                <field name="no_hp" readonly="1" force_save="1"/>
+                            </group>
+                            <group>
+                                <field name="judul" readonly="1" force_save="1"/>
+                                <field name="penulis" readonly="1" force_save="1"/>
+                                <field name="penerbit" readonly="1" force_save="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- search -->
+        <record id="nm_request_buku_view_search" model="ir.ui.view">
+            <field name="name">nm.request.buku.search</field>
+            <field name="model">nm.request.buku</field>
+            <field name="arch" type="xml">
+                <search string="Pengajuan Buku">
+                    <field name="user_id" select="True"/>
+                    <field name="judul" select="True"/>
+                    <field name="penulis" select="True"/>
+                    <field name="penerbit" select="True"/>
+                    <filter name="draft_state" string="Di Request" domain="[('state','=','Di Request')]"/>
+                    <filter name="selesai_state" string="Selesai" domain="[('state','=','Selesai')]"/>
+                    <group string="Group By..">
+                        <filter string="user_id" domain="[]" name="group_by_user_id" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- action window -->
+        <record id="nm_request_buku_action" model="ir.actions.act_window">
+            <field name="name">Daftar Pengajuan Buku</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">nm.request.buku</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"search_default_fieldname":1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Klik untuk membuat Pengajuan Buku baru
+                </p>
+                <p>
+                Silahkan Klik tombol Create untuk membuat Pengajuan Buku baru
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="nm_request_buku_menu" name="Daftar Pengajuan Buku" parent="nm_perpustakaan_top_menu" action="nm_request_buku_action" sequence="50" groups="nm_perpustakaan.group_nm_perpustakaan_admin"/>
+
+        <!-- USER -->
+
+
+        <!-- Form Pengajuan Buku -->
+        <record id="view_konfirmasi_request_wizard" model="ir.ui.view">
+            <field name="name">nm.request.buku.konfirmasi.wizard</field>
+            <field name="model">nm.request.buku</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Konfirmasi Pengajuan Buku">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="judul" required="1" force_save="1"/>
+                                <field name="penulis" required="1" force_save="1"/>
+                                <field name="penerbit" required="1" force_save="1"/>
+                            </group>
+                            <group>
+                                <field name="date" readonly="1" force_save="1"/>
+                                <field name="user_id" required="1" readonly="1" options="{'no_open':True,'no_create_edit':True}" force_save="1"/>
+                            </group>
+                        </group>
+                        <footer>
+                            <button string="Save" class="oe_highlight" name="create" type="object" />
+                            or
+                            <button string="Cancel" class="oe_highlight" special="cancel" />
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="nm_request_buku_wizard_action" model="ir.actions.server">
+            <field name="name">Pengajuan Buku</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="nm_perpustakaan.model_nm_request_buku"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = env['nm.request.buku'].action_request_buku_wizard()
+            </field>
+        </record>
+
+        <menuitem id="nm_request_buku_wizard_menu" name="Pengajuan Buku" parent="nm_perpustakaan_top_menu" action="nm_request_buku_wizard_action" sequence="40" groups="nm_perpustakaan.group_nm_perpustakaan_non_member"/>
+
+    </data>
+</odoo>

@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_nm_peminjaman_nm_peminjaman,nm_peminjaman.nm_peminjaman,model_nm_peminjaman,,1,1,1,1
+access_nm_request_buku_nm_request_buku,nm_request_buku.nm_request_buku,model_nm_request_buku,,1,1,1,1
 access_nm_product,nm_peminjaman.nm_product,model_product_product,,1,1,1,1
 access_nm_users,nm_peminjaman.nm_users,model_res_users,,1,1,1,1
