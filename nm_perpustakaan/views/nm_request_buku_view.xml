@@ -121,7 +121,7 @@
                             </group>
                         </group>
                         <footer>
-                            <button string="Save" class="oe_highlight" name="create" type="object" />
+                            <button string="Ajukan" class="oe_highlight" name="action_pengajuan" type="object" />
                             or
                             <button string="Cancel" class="oe_highlight" special="cancel" />
                         </footer>

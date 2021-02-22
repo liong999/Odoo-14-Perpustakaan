@@ -22,7 +22,7 @@ class NmRequestBuku(models.Model):
     judul = fields.Char(string='Judul')
     penulis = fields.Char(string='Penulis')
     penerbit = fields.Char(string='Penerbit')
-    state = fields.Selection(string='Status', selection=[('Di Request','Di Request'),('Selesai','Selesai')],default='requested')
+    state = fields.Selection(string='Status', selection=[('Di Request','Di Request'),('Selesai','Selesai')],default='Di Request')
     date = fields.Date(string='Tanggal Pengajuan Buku',default=_get_default_date)
     no_hp = fields.Char(string='No HP',compute='_compute_no_hp')
         
@@ -45,20 +45,23 @@ class NmRequestBuku(models.Model):
             'views': [(form_id, 'form')],
         }
     
-    
+    def action_pengajuan(self):
+        pass
+
     @api.model_create_multi
     def create(self, vals_list):
         self._check_workday()
         for vals in vals_list:
-            requested = self.env['nm.request.buku'].sudo().search([
-                ('judul','=',vals.get('judul')),
-                ('penulis','=',vals.get('penulis')),
-                ('penerbit','=',vals.get('penerbit')),
-                ('state','=','Di Request'),
-            ])
-            if requested:
-                raise Warning('Buku ini sudah di request :) Mohon tunggu sampai bukunya tersedia ya')
-            vals['name'] = self.env['ir.sequence'].sudo().get_sequence('PERPUS','REQ')
+            if vals:
+                requested = self.env['nm.request.buku'].sudo().search([
+                    ('judul','=',vals.get('judul')),
+                    ('penulis','=',vals.get('penulis')),
+                    ('penerbit','=',vals.get('penerbit')),
+                    ('state','=','Di Request'),
+                ])
+                if requested:
+                    raise Warning('Buku ini sudah di request :) Mohon tunggu sampai bukunya tersedia ya')
+                vals['name'] = self.env['ir.sequence'].sudo().get_sequence('PERPUS','REQ')
         sp = super(NmRequestBuku, self).create(vals_list)
         return sp
 
