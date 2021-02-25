@@ -155,6 +155,7 @@ class ControllerREST(http.Controller):
                 'user_id':uid,
             })
             peminjaman.action_request()
+            return valid_response(200,'Success')
         except Exception as e:
             return invalid_response(401,'request_failed', e, 'POST')
     
@@ -173,6 +174,7 @@ class ControllerREST(http.Controller):
 
         try:
             peminjaman_obj.action_request_perpanjangan()
+            return valid_response(200,'Success')
         except Exception as e:
             return invalid_response(401,'request_failed', e, 'POST')
     
@@ -192,6 +194,30 @@ class ControllerREST(http.Controller):
 
         try:
             peminjaman_obj.action_pengembalian()
+            return valid_response(200,'Success')
         except Exception as e:
             return invalid_response(401,'request_failed', e, 'POST')
+    
+    
+    @http.route('/api/perpustakaan/post_request_buku', methods=['POST'], type='json', auth='none', csrf=False)
+    @check_valid_token
+    def post_request_buku(self,**post):
+        uid = request.session.uid
+        judul = post.get('judul','')
+        penulis = post.get('penulis','')
+        penerbit = post.get('penerbit','')
+
+        if not judul or not penulis:
+            return invalid_response(401,'data_not_found','Pengajuan - judul and penulis is required','POST')
+
+        try:
+            request.env['nm.request.buku'].sudo().create({
+                'judul':judul,
+                'penulis':penulis,
+                'penerbit':penerbit,
+            })
+            return valid_response(200,'Success')
+        except Exception as e:
+            return invalid_response(401,'request_failed', e, 'POST')
+    
     
